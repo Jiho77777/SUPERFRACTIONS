@@ -45,7 +45,7 @@ h1{font-size:clamp(27px,5vw,42px);margin:20px 0 4px;letter-spacing:-1px}.sub{col
 (()=>{
 const $=id=>document.getElementById(id);
 const topping={pep:{e:'🍕',n:'페퍼로니',c:'#f3b84a'},cheese:{e:'🧀',n:'치즈',c:'#ffd968'},mush:{e:'🍄',n:'버섯',c:'#e9c5a4'},olive:{e:'🫒',n:'올리브',c:'#a5ad62'},corn:{e:'🌽',n:'옥수수',c:'#ffe17a'},bacon:{e:'🥓',n:'베이컨',c:'#d98a68'},pine:{e:'🍍',n:'파인애플',c:'#ffd45e'},plain:{e:'🍞',n:'기본',c:'#efc77c'}};
-let level=1,coins=0,served=0,storeName='SUPER FRACTIONS',served=0,selected='pep',slices=[],tasks=[],locked=false,oven=false,sign=false,hat=false,streak=0,round=0,phase='divide',targetN=0,divisionCount=0;const START_STOCK=12;let stock={pep:START_STOCK,cheese:START_STOCK,mush:START_STOCK,olive:START_STOCK,corn:START_STOCK,bacon:START_STOCK,pine:START_STOCK};
+let level=1,coins=0,served=0,storeName='SUPER FRACTIONS',selected='pep',slices=[],tasks=[],locked=false,oven=false,sign=false,hat=false,streak=0,round=0,phase='divide',targetN=0,divisionCount=0;const START_STOCK=12;let stock={pep:START_STOCK,cheese:START_STOCK,mush:START_STOCK,olive:START_STOCK,corn:START_STOCK,bacon:START_STOCK,pine:START_STOCK};
 const rand=a=>a[Math.floor(Math.random()*a.length)];
 function ingredientArt(type,x=0,y=0,size=1){const tr=`translate(${x} ${y}) scale(${size})`;let s='';
 if(type==='pep'){s='<circle cx="-10" cy="-5" r="7" fill="#b93625" stroke="#7d241d" stroke-width="1.8"/><circle cx="8" cy="-9" r="7" fill="#c9432b" stroke="#7d241d" stroke-width="1.8"/><circle cx="1" cy="9" r="7" fill="#b93625" stroke="#7d241d" stroke-width="1.8"/>'+[[-12,-7],[6,-11],[-1,7]].map(([a,b])=>'<circle cx="'+a+'" cy="'+b+'" r="2" fill="#f18a5d"/>').join('');}
