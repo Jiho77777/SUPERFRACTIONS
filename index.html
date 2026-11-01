@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff4df"><title>SUPER FRACTIONS Pizza Shop</title>
+<style>
+:root{--ink:#38251e;--muted:#80695c;--cream:#fff8ed;--paper:#fffdf8;--red:#e65b43;--gold:#f3b83f;--green:#39866b;--line:#eadbc9}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 5%,#ffe5b8,transparent 30%),linear-gradient(145deg,#fff4df,#ffe9e3);color:var(--ink);font-family:ui-rounded,"Arial Rounded MT Bold",system-ui,sans-serif}
+main{max-width:960px;margin:auto;padding:20px 15px 36px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:clamp(22px,4vw,34px);font-weight:1000;letter-spacing:-1px}.brand span{color:var(--red)}.stats{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#fff;border:1px solid var(--line);border-radius:99px;padding:9px 13px;font-weight:800;box-shadow:0 3px 0 #eadbc9}
+h1{font-size:clamp(26px,5vw,42px);margin:22px 0 5px;letter-spacing:-1px}.sub{color:var(--muted);margin:0 0 18px}.layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{background:rgba(255,253,248,.94);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 7px 0 rgba(119,75,43,.09)}.card h2{font-size:19px;margin:0 0 12px}.customer{display:flex;align-items:center;gap:12px;background:#fff0df;border-radius:16px;padding:12px}.avatar{font-size:42px}.customer strong{display:block;font-size:17px}.customer small{color:var(--muted)}.order{font-size:23px;font-weight:1000;margin:14px 0 5px}.order small{font-size:14px;color:var(--muted);font-weight:700}.fractions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.fraction{background:#fff;border:1px solid var(--line);border-radius:13px;padding:8px 11px;font-weight:900}.fraction b{color:var(--red)}
+.pizza-wrap{display:flex;justify-content:center;align-items:center;min-height:300px;background:linear-gradient(#fff4e4,#ffead4);border-radius:18px;overflow:hidden}.pizza{width:min(100%,330px);height:auto;filter:drop-shadow(0 9px 5px #9a674455)}svg text{font-family:system-ui;pointer-events:none}.slice{cursor:pointer;stroke:#9d542b;stroke-width:2.5;transition:filter .12s}.slice:hover{filter:brightness(1.12)}.slice:focus{outline:none;stroke:#3d8d70;stroke-width:6}
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.tool{background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 5px;font-weight:850;cursor:pointer}.tool.active{outline:3px solid var(--red);background:#fff0e9}.tool span{display:block;font-size:24px;margin-bottom:3px}.btn{border:0;border-radius:14px;padding:13px 16px;font-size:16px;font-weight:950;cursor:pointer;background:var(--red);color:#fff;box-shadow:0 4px 0 #ad3c2c}.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #ad3c2c}.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:0 4px 0 #e4d4c2}.btn:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:9px;margin-top:13px;flex-wrap:wrap}.actions .btn{flex:1}.feedback{min-height:48px;margin-top:12px;padding:12px;border-radius:14px;background:#f5f0e7;font-weight:800;line-height:1.4}.feedback.good{background:#e3f5e9;color:#236648}.feedback.bad{background:#fff0e9;color:#a43f2c}.progress{height:10px;background:#f0e1cf;border-radius:99px;overflow:hidden;margin:8px 0 15px}.progress i{display:block;height:100%;background:linear-gradient(90deg,#f3b83f,#e65b43);width:0%;transition:width .25s}.hint{font-size:13px;color:var(--muted);line-height:1.5}.hidden{display:none!important}.shoprow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.shoprow:first-of-type{border:0}.shoprow button{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:850;cursor:pointer}
+@media(max-width:720px){.layout{grid-template-columns:1fr}.pizza-wrap{min-height:260px}.card{padding:15px}main{padding:15px 11px 28px}}
+</style></head>
+<body><main>
+<div class="top"><div class="brand">🍕 SUPER <span>FRACTIONS</span></div><div class="stats"><div class="pill">🪙 <b id="coins">0</b></div><div class="pill">⭐ 레벨 <b id="level">1</b></div><div class="pill">🍕 판매 <b id="served">0</b></div></div></div>
+<h1>분수 피자 가게</h1><p class="sub">손님의 분수 주문을 정확하게 피자로 만들어 보세요!</p>
+<div class="progress"><i id="bar"></i></div>
+<div class="layout">
+<section class="card">
+<h2>📋 오늘의 주문</h2><div class="customer"><div class="avatar" id="avatar">👩</div><div><strong id="customer">첫 손님이 왔어요!</strong><small id="mood">주문을 확인해 주세요.</small></div></div>
+<div class="order" id="orderTitle">피자 1판을 만들어 주세요!</div><div class="hint" id="orderHint">피자를 몇 조각으로 나눌지 확인하세요.</div>
+<div class="fractions" id="fractionTags"></div>
+<div class="feedback" id="feedback" aria-live="polite">토핑을 선택하고 피자 조각을 눌러 주세요!</div>
+<div class="actions"><button class="btn" id="serve">🔔 주문 완성!</button><button class="btn secondary" id="clear">↺ 다시 만들기</button></div>
+</section>
+<section class="card">
+<h2>👩‍🍳 피자 만들기</h2><div class="pizza-wrap"><svg id="pizza" class="pizza" viewBox="0 0 340 340" role="group" aria-label="조각을 선택할 수 있는 피자"></svg></div>
+<p class="hint" style="text-align:center;margin:8px 0 13px">아래 토핑을 고른 다음 원하는 조각을 눌러요.</p>
+<div class="tools" id="tools">
+<button class="tool active" data-t="pep"><span>🍕</span>페퍼로니</button><button class="tool" data-t="cheese"><span>🧀</span>치즈</button><button class="tool" data-t="mush"><span>🍄</span>버섯</button><button class="tool" data-t="olive"><span>🫒</span>올리브</button><button class="tool" data-t="corn"><span>🌽</span>옥수수</button><button class="tool" data-t="plain"><span>🍞</span>기본</button>
+</div></section>
+</div>
+<section class="card" style="margin-top:16px"><h2>🏆 피자 가게 업그레이드</h2><p class="hint">피자를 팔아 코인을 모으면 가게를 꾸밀 수 있어요!</p>
+<div class="shoprow"><div>🌟 <b>황금 오븐</b><div class="hint">주문 성공 보너스 +2 코인</div></div><button id="oven">🪙 20 코인</button></div>
+<div class="shoprow"><div>🎀 <b>귀여운 간판</b><div class="hint">가게 꾸미기 아이템</div></div><button id="sign">🪙 15 코인</button></div>
+</section>
+<p class="hint" style="text-align:center;margin-top:14px">학습 팁: 분모는 전체 조각 수, 분자는 선택한 조각 수예요. 예를 들어 3/8은 8조각 중 3조각!</p>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const topping={pep:{e:'🍕',n:'페퍼로니',c:'#f3b84a'},cheese:{e:'🧀',n:'치즈',c:'#ffd968'},mush:{e:'🍄',n:'버섯',c:'#e9c5a4'},olive:{e:'🫒',n:'올리브',c:'#a5ad62'},corn:{e:'🌽',n:'옥수수',c:'#ffe17a'},plain:{e:'🍞',n:'기본',c:'#efc77c'}};
+let level=1,coins=0,served=0,selected='pep',slices=[],tasks=[],locked=false,oven=false,sign=false,round=0;
+const rand=a=>a[Math.floor(Math.random()*a.length)];
+function path(cx,cy,r,a0,a1){const p=(a)=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];const s=p(a0),e=p(a1),large=a1-a0>Math.PI?1:0;return `M ${cx} ${cy} L ${s[0]} ${s[1]} A ${r} ${r} 0 ${large} 1 ${e[0]} ${e[1]} Z`}
+function renderPizza(){
+ const n=slices.length,cx=170,cy=170,r=145;let out='<circle cx="170" cy="170" r="155" fill="#bd7138"/><circle cx="170" cy="170" r="148" fill="#f4d28b"/>';
+ for(let i=0;i<n;i++){let a0=-Math.PI/2+i*2*Math.PI/n,a1=-Math.PI/2+(i+1)*2*Math.PI/n;let mid=(a0+a1)/2,tx=cx+Math.cos(mid)*86,ty=cy+Math.sin(mid)*86;let t=topping[slices[i]];
+ out+=`<path class="slice" tabindex="0" role="button" aria-label="${i+1}번 조각 ${t.n}" data-i="${i}" d="${path(cx,cy,r,a0,a1)}" fill="${t.c}"/><text x="${tx}" y="${ty+9}" text-anchor="middle" font-size="${n>8?19:25}">${t.e}</text>`;
+ }
+ out+='<circle cx="170" cy="170" r="13" fill="#e8a64e" stroke="#9d542b" stroke-width="2"/>';$('pizza').innerHTML=out;
+ $('pizza').querySelectorAll('.slice').forEach(el=>{el.addEventListener('click',()=>put(+el.dataset.i));el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();put(+el.dataset.i)}})});
+}
+function newOrder(){
+ locked=false;round++;let n=level<3?rand([4,8]):rand([4,8,12]);let max=Math.max(1,Math.floor(n*.45));let a=1+Math.floor(Math.random()*max),b=1+Math.floor(Math.random()*Math.max(1,Math.min(max,n-a)));
+ if(a+b>=n)b=Math.max(1,n-a-1);
+ let pool=['pep','cheese','mush','olive','corn'];let t1=rand(pool),t2=rand(pool.filter(x=>x!==t1));tasks=[{t:t1,count:a},{t:t2,count:b}];slices=Array(n).fill('plain');
+ $('avatar').textContent=rand(['👩','👨','🧑','👵','👨‍🍳']);$('customer').textContent=rand(['배고픈 손님','피자를 좋아하는 손님','단골 손님','새로운 손님']);$('mood').textContent='주문을 정확히 만들어 주세요!';
+ $('orderTitle').textContent='피자 '+a+'/'+n+' '+topping[t1].n+' · '+b+'/'+n+' '+topping[t2].n;
+ $('orderHint').textContent='총 '+n+'조각! 남은 '+(n-a-b)+'조각은 기본 토핑으로 만들어요.';
+ $('fractionTags').innerHTML=tasks.map(x=>'<div class="fraction"><b>'+x.count+'/'+n+'</b> '+topping[x.t].e+' '+topping[x.t].n+'</div>').join('');
+ $('feedback').className='feedback';$('feedback').textContent='토핑을 고르고 해당하는 조각을 눌러 주세요.';$('serve').disabled=false;$('bar').style.width=((round-1)%5)*20+'%';renderPizza();update();
+}
+function put(i){if(locked)return;slices[i]=selected;renderPizza();$('feedback').className='feedback';$('feedback').textContent=(i+1)+'번 조각에 '+topping[selected].n+' 토핑을 올렸어요!'}
+function update(){$('coins').textContent=coins;$('level').textContent=level;$('served').textContent=served;$('oven').textContent=oven?'✅ 구매 완료':'🪙 20 코인';$('sign').textContent=sign?'✅ 구매 완료':'🪙 15 코인';$('oven').disabled=oven||coins<20;$('sign').disabled=sign||coins<15}
+$('tools').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if(locked)return;selected=b.dataset.t;$('tools').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b))}));
+$('serve').addEventListener('click',()=>{
+ if(locked)return;let mistakes=[];
+ tasks.forEach(task=>{let got=slices.filter(x=>x===task.t).length;if(got!==task.count)mistakes.push(topping[task.t].n+': '+got+'/'+slices.length+' (주문 '+task.count+'/'+slices.length+')')});
+ let plainExpected=slices.length-tasks[0].count-tasks[1].count,plainGot=slices.filter(x=>x==='plain').length;
+ if(plainGot!==plainExpected)mistakes.push('기본 토핑: '+plainGot+'조각 (주문 '+plainExpected+'조각)');
+ if(mistakes.length){$('feedback').className='feedback bad';$('feedback').textContent='아직 주문과 달라요! '+mistakes.join(' · ')+' 조각을 고쳐 보세요.';return}
+ locked=true;served++;let reward=10+(oven?2:0);coins+=reward;if(served%4===0)level++;$('feedback').className='feedback good';$('feedback').textContent='🎉 완벽해요! 분수 주문 성공! +'+reward+' 코인'+(served%4===0?' · 레벨 업!':'');$('serve').disabled=true;$('bar').style.width=(round%5)*20+'%';update();
+ setTimeout(()=>{if(locked){$('feedback').innerHTML+=' <button id="nextOrder" class="btn" style="margin-left:8px;padding:7px 12px">다음 손님 ➜</button>';$('nextOrder').addEventListener('click',newOrder)}},350);
+});
+$('clear').addEventListener('click',()=>{if(locked)return;slices=Array(slices.length).fill('plain');renderPizza();$('feedback').className='feedback';$('feedback').textContent='피자를 다시 만들 수 있어요!'});
+$('oven').addEventListener('click',()=>{if(!oven&&coins>=20){coins-=20;oven=true;update();$('feedback').textContent='🌟 황금 오븐을 구매했어요! 성공 보너스 +2 코인.'}});
+$('sign').addEventListener('click',()=>{if(!sign&&coins>=15){coins-=15;sign=true;update();$('feedback').textContent='🎀 새 간판을 설치했어요! 가게가 더 예뻐졌어요.'}});
+newOrder();
+})();
+</script></body></html>
