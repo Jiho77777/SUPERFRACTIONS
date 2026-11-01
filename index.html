@@ -49,18 +49,18 @@ const tabs=$('gameTabs'),panels=$('gamePanels'),panelMap={};
 tabNames.forEach(([id,label])=>{const b=document.createElement('button');b.className='tab-btn';b.textContent=label;b.dataset.tab=id;b.addEventListener('click',()=>showTab(id));tabs.appendChild(b);const p=document.createElement('section');p.className='tab-panel';p.id='panel-'+id;panels.appendChild(p);panelMap[id]=p;});
 function showTab(id){if(!panelMap[id])return;Object.entries(panelMap).forEach(([k,p])=>p.classList.toggle('active',k===id));tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));}
 const legacy=$('legacyLayout'),leftCard=legacy.children[0],rightCard=legacy.children[1],orderMount=$('orderMount');
-['customer','orderTitle','orderHint','fractionTags'].forEach(id=>orderMount.appendChild($(id)));
+['orderTitle','orderHint','fractionTags'].forEach(id=>orderMount.appendChild($(id)));
 orderMount.insertBefore(leftCard.querySelector('.customer'),orderMount.firstChild);
 orderMount.appendChild(leftCard.querySelector('.workflow'));orderMount.appendChild($('feedback'));
 function cardFor(title){const c=document.createElement('div');c.className='tab-card';const h=document.createElement('h2');h.textContent=title;c.appendChild(h);return c;}
 const divideCard=cardFor('🔪 피자 등분하기');divideCard.appendChild($('divisionPanel'));divideCard.appendChild(rightCard.querySelector('.pizza-wrap'));panelMap.divide.appendChild(divideCard);
 const makeCard=cardFor('🍕 토핑 올리기');makeCard.appendChild(rightCard.querySelector('#tools'));makeCard.appendChild($('clear'));panelMap.make.appendChild(makeCard);
 const stageCard=cardFor('🍕 작업하기');const workMount=document.createElement('div');workMount.id='workMount';stageCard.appendChild(workMount);const actionMount=document.createElement('div');actionMount.className='actions';actionMount.id='actionMount';actionMount.appendChild($('serve'));stageCard.appendChild(actionMount);
-['bake','cut','pack','delivery'].forEach((id,i)=>{const c=cardFor(['🔥 오븐에서 굽기','✂️ 피자 자르기','📦 주문 포장하기','🛎️ 손님에게 배달하기'][i]);c.appendChild(workMount);c.appendChild(actionMount);panelMap[id].appendChild(c);});
+const stageTitles={bake:'🔥 오븐에서 굽기',cut:'✂️ 피자 자르기',pack:'📦 주문 포장하기',delivery:'🛎️ 손님에게 배달하기'};panelMap.delivery.appendChild(stageCard);
 const shopSection=document.querySelector('body main > section.card[style*="margin-top:15px"]');const lessonSection=document.querySelectorAll('body main > section.card[style*="margin-top:15px"]')[1];
 const inventory=shopSection.querySelector('.shop-section');const inventoryCard=cardFor('🧺 재료 창고');inventoryCard.appendChild(inventory);panelMap.inventory.appendChild(inventoryCard);panelMap.shop.appendChild(shopSection);panelMap.lesson.appendChild(lessonSection);
 legacy.style.display='none';showTab('divide');
-function syncStagePanel(){const target=({divide:'divide',make:'make',bake:'bake',cut:'cut',pack:'pack',give:'delivery',done:'delivery'})[phase]||'divide';const dest=panelMap[target];if(dest){workMount.appendChild($('workArea'));actionMount.appendChild($('serve'));if(target==='divide'&&$('pizza').closest('.pizza-wrap')){}showTab(target);}}
+function syncStagePanel(){const target=({divide:'divide',make:'make',bake:'bake',cut:'cut',pack:'pack',give:'delivery',done:'delivery'})[phase]||'divide';const dest=panelMap[target];if(dest){dest.appendChild(stageCard);stageCard.querySelector('h2').textContent=stageTitles[target]||'🍕 작업하기';workMount.appendChild($('workArea'));actionMount.appendChild($('serve'));showTab(target);}}
 
 const topping={pep:{e:'🍕',n:'페퍼로니',c:'#f3b84a'},cheese:{e:'🧀',n:'치즈',c:'#ffd968'},mush:{e:'🍄',n:'버섯',c:'#e9c5a4'},olive:{e:'🫒',n:'올리브',c:'#a5ad62'},corn:{e:'🌽',n:'옥수수',c:'#ffe17a'},plain:{e:'🍞',n:'기본',c:'#efc77c'}};
 let level=1,coins=0,served=0,selected='pep',slices=[],tasks=[],locked=false,oven=false,sign=false,hat=false,streak=0,round=0,phase='divide',targetN=0,divisionCount=0;const START_STOCK=12;let stock={pep:START_STOCK,cheese:START_STOCK,mush:START_STOCK,olive:START_STOCK,corn:START_STOCK};
