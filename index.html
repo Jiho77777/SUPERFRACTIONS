@@ -91,7 +91,7 @@ $('tools').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>
 $('serve').addEventListener('click',()=>{
 if(phase==='bake'){finishBake();return;}
 if(phase==='bakeRetry'){startBake();return;}
-if(phase==='cut'){cutComplete=true;phase='pack';packedSlices=[];setStep();renderPizza();const need=packageNeeded();$('workArea').innerHTML='<div class="big">✂️🍕</div><div>피자를 '+targetN+'등분했어요. 손님이 주문한 <b>'+need+'/'+targetN</b>만큼만 골라 포장해 주세요.</div>';$('feedback').className='feedback';$('feedback').textContent='초록색으로 표시할 조각을 '+need+'개 선택하세요. 선택한 조각만 손님에게 포장됩니다.';$('serve').disabled=true;$('serve').textContent='📦 포장하기 (0/'+need+')';return;}
+if(phase==='cut'){cutComplete=true;phase='pack';packedSlices=[];setStep();renderPizza();const need=packageNeeded();$('workArea').innerHTML='<div class="big">✂️🍕</div><div>주문한 '+need+'/'+targetN+'만큼만 잘라서 포장해 주세요.</div>';$('feedback').className='feedback';$('feedback').textContent='초록색 조각을 '+need+'개 선택하세요. 선택한 조각만 포장됩니다.';$('serve').disabled=true;$('serve').textContent='📦 포장하기 (0/'+need+')';return;}
 if(phase==='make'){
 let mistakes=[];tasks.forEach(task=>{let got=slices.filter(x=>x===task.t).length;if(got!==task.count)mistakes.push(topping[task.t].n+' '+got+'조각 (주문 '+task.count+'조각)')});let expected=slices.length-tasks.reduce((s,x)=>s+x.count,0),gotPlain=slices.filter(x=>x==='plain').length;if(gotPlain!==expected)mistakes.push('기본 토핑 '+gotPlain+'조각 (주문 '+expected+'조각)');
 if(mistakes.length){$('feedback').className='feedback bad';$('feedback').textContent='아직 주문과 달라요! '+mistakes.join(' · ')+'. 조각을 고쳐 보세요.';return;}
